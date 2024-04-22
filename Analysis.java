@@ -1,5 +1,4 @@
 package SummerProject2024;
-import java.io.Console;
 import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class Analysis {
         String followsTheMost = ""; //User who follows the most people
         int mostFollowers = 0;
         int edges = 0;
-        Dictionary<String, Integer> numberOfFollowers= new Hashtable<>();
+  
         List<String> allUsers = new ArrayList<String>();
         List<String> allConnections = new ArrayList<String>();
 
@@ -55,13 +54,7 @@ public class Analysis {
                 if(unique==1) allUsers.add(user);
             }
 
-            numFollowers--; //Users aren't necessarily following themselves
-
-            //Accomplishing task 1
-            //This should give all of the edges excluding the ability for a user to follow themselves
-            edges -= allUsers.size();
-            float density = edges / (allUsers.size() * (allUsers.size() - 1));
-            System.out.println("\nThe density of the graph is: " + String.format("%s", density));
+            numFollowers--; //Users aren't necessarily following themselves            
 
             if(numFollowers > mostFollowers){
               followsTheMost = names[0]; //This should be the most followed
@@ -73,25 +66,43 @@ public class Analysis {
           }
           myReader.close();
 
+          edges -= allUsers.size();
+          calculateDensity(edges, allUsers.size());
           //Just quickly sorting allUsers in alphabetical order for later use
           Collections.sort(allUsers);
-          //This would then allow us to pick the first index for task 3
-          //Now, let's search through allConnections for each user in allUsers
-          for(int i=0; i<allUsers.size();i++){
-            int numFollowers = 0;
-            for(int j=0; j<allConnections.size();j++){
-              //This user clearly follows our allUsers(j) - could also store their name in a linked list
-                if(allConnections.get(j).contains(allUsers.get(i))) numFollowers++;
-            }
-            numFollowers --;
-            //Assign the dicitonary value for how many followers that a single user has
-            numberOfFollowers.put(allUsers.get(i), numFollowers);
-          }
-
+          mostPopular = findMostFollowers(allUsers, allConnections);
+          System.out.println("The user with the most followers is " + mostPopular); 
+          
 
         } catch (FileNotFoundException e) {
           System.out.println("An error occurred.");
           e.printStackTrace();
         }
       }
+
+    static void calculateDensity(int edges, int nodes){
+          //Accomplishing task 1
+          //This should give all of the edges excluding the ability for a user to follow themselves
+          float density = edges / (nodes * (nodes - 1));
+          System.out.println("\nThe density of the graph is: " + String.format("%s", density));
+    }
+
+    static String findMostFollowers(List<String> allUsers, List<String> allConnections){
+      Dictionary<String, Integer> numberOfFollowers= new Hashtable<>();
+      //This would then allow us to pick the first index for task 3
+        //Now, let's search through allConnections for each user in allUsers
+        for(int i=0; i<allUsers.size();i++){
+          int numFollowers = 0;
+          for(int j=0; j<allConnections.size();j++){
+            //This user clearly follows our allUsers(j) - could also store their name in a linked list
+              if(allConnections.get(j).contains(allUsers.get(i))) numFollowers++;
+          }
+          numFollowers --;
+          //Assign the dicitonary value for how many followers that a single user has
+          numberOfFollowers.put(allUsers.get(i), numFollowers);
+        }
+        
+      
+      return "";
+    }
 }
