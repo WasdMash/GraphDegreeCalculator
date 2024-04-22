@@ -120,6 +120,6 @@ public class Analysis {
             if(mostPopular.compareTo(user) > 0) mostPopular = user;
           } 
         }      
-      return "";
+      return mostPopular;
     }
 }
