@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Scanner; // Import the Scanner class to read text files
@@ -71,7 +72,8 @@ public class Analysis {
           //Just quickly sorting allUsers in alphabetical order for later use
           Collections.sort(allUsers);
           mostPopular = findMostFollowers(allUsers, allConnections);
-          System.out.println("The user with the most followers is " + mostPopular); 
+          System.out.println("The user with the most followers is " + mostPopular);
+          System.out.println("The user who follows the most people is" + followsTheMost); 
           
 
         } catch (FileNotFoundException e) {
@@ -88,6 +90,8 @@ public class Analysis {
     }
 
     static String findMostFollowers(List<String> allUsers, List<String> allConnections){
+      int maxFollowers = 0;
+      String mostPopular = "";
       Dictionary<String, Integer> numberOfFollowers= new Hashtable<>();
       //This would then allow us to pick the first index for task 3
         //Now, let's search through allConnections for each user in allUsers
@@ -101,8 +105,21 @@ public class Analysis {
           //Assign the dicitonary value for how many followers that a single user has
           numberOfFollowers.put(allUsers.get(i), numFollowers);
         }
-        
-      
+        //Manually iterating across the dictionary to get the user with the most followers
+        Enumeration<String> userNames = numberOfFollowers.keys();
+        while(userNames.hasMoreElements()){
+          String user = userNames.nextElement();
+          int followers = numberOfFollowers.get(user);
+          //Obviously, if they have more followers, choose them
+          if(followers > maxFollowers){
+            maxFollowers = followers;
+            mostPopular = user;
+          }
+          else if(followers == maxFollowers){
+            //If two users have the same number of followers, then choose the one who is more alphabetical
+            if(mostPopular.compareTo(user) > 0) mostPopular = user;
+          } 
+        }      
       return "";
     }
 }
