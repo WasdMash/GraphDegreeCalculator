@@ -1,4 +1,3 @@
-package SummerProject2024;
 import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.util.ArrayList;
@@ -54,11 +53,10 @@ public class Analysis {
                 //I will only add the unique user to allUsers if they don't already exist
                 if(unique==1) allUsers.add(user);
             }
-
             numFollowers--; //Users aren't necessarily following themselves            
-
             if(numFollowers > mostFollowers){
               followsTheMost = names[0]; //This should be the most followed
+              mostFollowers = numFollowers;
             }
             else if(numFollowers == mostFollowers){
               if(followsTheMost.compareTo(names[0]) > 0) followsTheMost = names[0];
@@ -68,12 +66,14 @@ public class Analysis {
           myReader.close();
 
           edges -= allUsers.size();
+          //Edges calculates perfectly here but the value isn't being passed into the static function correctly
+          //Maybe try another code for this
           calculateDensity(edges, allUsers.size());
           //Just quickly sorting allUsers in alphabetical order for later use
           Collections.sort(allUsers);
           mostPopular = findMostFollowers(allUsers, allConnections);
           System.out.println("The user with the most followers is " + mostPopular);
-          System.out.println("The user who follows the most people is" + followsTheMost); 
+          System.out.println("The user who follows the most people is " + followsTheMost); 
           
 
         } catch (FileNotFoundException e) {
@@ -85,7 +85,7 @@ public class Analysis {
     static void calculateDensity(int edges, int nodes){
           //Accomplishing task 1
           //This should give all of the edges excluding the ability for a user to follow themselves
-          float density = edges / (nodes * (nodes - 1));
+          float density = (float) edges / (nodes * (nodes - 1));
           System.out.println("\nThe density of the graph is: " + String.format("%s", density));
     }
 
