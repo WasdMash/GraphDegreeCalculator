@@ -114,7 +114,7 @@ public class Analysis {
       int[] sortedNumFollowersArray = followerInfo.getNumFollowersArray();
       boolean swapped = true;
       int n = sortedNumFollowersArray.length;
-      while(!swapped && n > 0){
+      while(swapped && n > 0){
         swapped = false;
         n--;
         //A single pass in the bubble sort algorithm
