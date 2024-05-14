@@ -32,6 +32,9 @@ public class Analysis {
         System.out.println("The user who has the most followers is: " + followerInfo.getMostFollowed());
         //This code should complete task 4
         findTwoDegrees(users);
+
+        //This function will complete task 5
+        System.out.println("This network has a median of " + String.format("%s", medianFollowers(followerInfo) + " followers."));
       } 
 
     static FollowerData findMostFollowers(GraphData users, int[][] adjacencyMatrix){
@@ -103,5 +106,40 @@ public class Analysis {
       }
       
       System.out.println("The first user in the file, " + users.getOGuser() + ", has a grand number of " + String.format("%s", twoDegrees) + " users at 2 degrees of separation");
+    }
+
+    //This function will complete task 5 by returning the median number of followers in the network
+    static int medianFollowers(FollowerData followerInfo){
+      //Might just bubble sort the array to get it in order
+      int[] sortedNumFollowersArray = followerInfo.getNumFollowersArray();
+      boolean swapped = true;
+      int n = sortedNumFollowersArray.length;
+      while(!swapped && n > 0){
+        swapped = false;
+        n--;
+        //A single pass in the bubble sort algorithm
+        for(int i=0; i<n;i++){
+          if(sortedNumFollowersArray[i] > sortedNumFollowersArray[i+1]){
+            //Basically swap these two numbers around
+            int temp = sortedNumFollowersArray[i+1];
+            sortedNumFollowersArray[i+1] = sortedNumFollowersArray[i];
+            sortedNumFollowersArray[i] = temp;
+            swapped = true;
+          }
+        }
+      }
+
+      float middle = sortedNumFollowersArray.length / 2;
+      if(middle != (float)Math.round(middle)){
+        //Basically if middle has a .5 in it, then average the numbers of both sides of it
+        int low = (int)Math.floor(middle);
+        int high = (int)Math.ceil(middle);
+        return (sortedNumFollowersArray[low] + sortedNumFollowersArray[high]) / 2;
+
+      }
+      else{
+        //Middle lands on a integer value and this must be our median
+        return sortedNumFollowersArray[(int)middle];
+      }
     }
 }
