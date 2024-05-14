@@ -1,0 +1,10 @@
+For task 6, here's the plan
+
+Repeat for all users in the array:
+
+    Have a list of names
+        Start from the beginning of the usersArray alphabetically
+            Check their followers
+                If the followers aren't stored in the list of found names, add them
+                
+                If the follower is stored in the list (already received a message), skip them
