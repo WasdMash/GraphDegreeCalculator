@@ -92,6 +92,7 @@ public class Analysis {
         }
       }
 
+      List<String> uniqueSecondDegFollowers = new ArrayList<String>();
       //These followers do not directly follow OgUser, therefore are 2nd degree followers
       for(int i=0;i<maxFollowersIndex;i++){
           for(int j=0;j<followerIndices.length;j++){
@@ -101,8 +102,11 @@ public class Analysis {
               //Must also check to make sure that OGUser doesn't follow them either
               if(!secondDegFollowers.contains(users.getOGuser())){
                 //Just here to make sure that there are no duplicates
+                if(!uniqueSecondDegFollowers.contains(users.getUsersArray()[j])){
+                  uniqueSecondDegFollowers.add(users.getUsersArray()[j]);
                   twoDegrees++;
                   System.err.println(users.getUsersArray()[j]);
+                }
               } 
             }
           }
