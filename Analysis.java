@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 class FollowerData{
@@ -38,6 +39,11 @@ public class Analysis {
 
         //This function will complete task 5
         System.out.println("This network has a median of " + String.format("%s", medianFollowers(followerInfo) + " followers."));
+
+        //This function will complete task 6
+          //Just use a breadth-first search and then return the user with the shortest distance
+        System.out.println("The best person to enrol to spread information is " + bestPropagator(adjacencyMatrix, users));
+        
       } 
 
     static FollowerData findMostFollowers(GraphData users, int[][] adjacencyMatrix){
@@ -92,7 +98,11 @@ public class Analysis {
         }
       }
 
+      //Stores all of the unique second degree followers
+      //Might be helpful to return in the output of the function as well for visualisationn
       List<String> uniqueSecondDegFollowers = new ArrayList<String>();
+
+
       //These followers do not directly follow OgUser, therefore are 2nd degree followers
       for(int i=0;i<maxFollowersIndex;i++){
           for(int j=0;j<followerIndices.length;j++){
@@ -105,20 +115,15 @@ public class Analysis {
                 if(!uniqueSecondDegFollowers.contains(users.getUsersArray()[j])){
                   uniqueSecondDegFollowers.add(users.getUsersArray()[j]);
                   twoDegrees++;
-                  System.err.println(users.getUsersArray()[j]);
                 }
               } 
             }
           }
           
       }
-
-
       System.out.println("The first user in the file, " + users.getOGuser() + ", has a grand number of " + String.format("%s", twoDegrees) + " users at 2 degrees of separation");
         
       }    
-      
-
 
     //This function will complete task 5 by returning the median number of followers in the network
     static int medianFollowers(FollowerData followerInfo){
@@ -153,5 +158,26 @@ public class Analysis {
         //Middle lands on a integer value and this must be our median
         return sortedNumFollowersArray[(int)middle];
       }
+    }
+
+    static String bestPropagator(int[][] network, GraphData users){
+      //Set to this so that we don't have an issue when comparing any reasonable name alphabetically with
+        //bestAdvertiser as opposed to comparing a name with an empty string
+      String bestAdvertiser = "ZZZZZZZZ";
+      int maxReach = 0;
+
+      for(int i=0;i<network.length;i++){
+        //Using the breadth-first search algorithm to find out how many followers a user has
+        int reach = BreadthFirst.BreadthFirstSearch(network, i).size();
+        if(reach > maxReach ){
+          bestAdvertiser = users.getUsersArray()[i];
+          maxReach = reach;
+        }
+        else if(reach == maxReach && bestAdvertiser.compareToIgnoreCase(users.getUsersArray()[i]) > 0){
+          bestAdvertiser = users.getUsersArray()[i];
+        }
+      }
+
+      return bestAdvertiser;
     }
 }
