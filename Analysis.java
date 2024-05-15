@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 class FollowerData{
   int[] numberOfFollowers;
   String mostFollowed = "";
@@ -31,7 +34,7 @@ public class Analysis {
         FollowerData followerInfo = findMostFollowers(users, adjacencyMatrix);
         System.out.println("The user who has the most followers is: " + followerInfo.getMostFollowed());
         //This code should complete task 4
-        findTwoDegrees(users);
+        findTwoDegrees(users, adjacencyMatrix);
 
         //This function will complete task 5
         System.out.println("This network has a median of " + String.format("%s", medianFollowers(followerInfo) + " followers."));
@@ -65,12 +68,14 @@ public class Analysis {
     //This function should return the number of users who are at 2 degrees of separation
     //Away from the OG user in the text file
     //Can later be optimised to complete task 6 as well but can't be bothered to do that yet
-    static void findTwoDegrees(GraphData users){
+    static void findTwoDegrees(GraphData users, int[][] network){
       //This integer stores the number of users found at 2 degrees of separation
       int twoDegrees = 0;
-      int OGUserIndex = 0;
+      int maxFollowersIndex = 0;
+      int[] followerIndices = new int[users.getUsersArray().length];
 
-      //finding the index of the original OG user at the start of the file
+      //Finding the index of the original OG user at the start of the file
+      int OGUserIndex = 0;
       for(int i=0;i<users.getUsersArray().length;i++){
         if(users.getUsersArray()[i] == users.getOGuser()){
           OGUserIndex = i;
@@ -78,35 +83,38 @@ public class Analysis {
         }
       }
 
-      String[] followers = users.getUserConnections()[OGUserIndex].split(" ", -2);
-      for(int i=1;i<followers.length;i++){
-
-        int pFollowIndex = 0;
-        //finding the index of the original OG user at the start of the file
-        for(int j=0;j<users.getUsersArray().length;j++){
-
-          if(users.getUsersArray()[j].equals(followers[i])){
-            pFollowIndex = j;
-            break;
-          }
-        }
-
-        //These followers do not directly follow OgUser, therefore are 2nd degree followers
-        String secondDegFollowers = users.getUserConnections()[pFollowIndex];
-        
-        
-        if(!secondDegFollowers.contains(users.getOGuser())) {
-          //Must also check to make sure that OGUser doesn't follow them either
-          String followersString = users.getUserConnections()[OGUserIndex];
-          if(!followersString.contains(users.getUsersArray()[pFollowIndex])){
-            twoDegrees++;
-          }
-          
+      //Find everyone who follows that original user
+      //Search through the array, silly
+      for(int i=0;i<followerIndices.length;i++){
+        if(network[OGUserIndex][i]==1){
+          //Found another follower of P
+          followerIndices[maxFollowersIndex++] = i;
         }
       }
-      
+
+      //These followers do not directly follow OgUser, therefore are 2nd degree followers
+      for(int i=0;i<maxFollowersIndex;i++){
+          for(int j=0;j<followerIndices.length;j++){
+            if(network[followerIndices[i]][j]==1){
+              //This is a follower of P's followers - now check to make sure that they also don't follow OGfirstUser
+              String secondDegFollowers = users.getUserConnections()[j];
+              //Must also check to make sure that OGUser doesn't follow them either
+              if(!secondDegFollowers.contains(users.getOGuser())){
+                //Just here to make sure that there are no duplicates
+                  twoDegrees++;
+                  System.err.println(users.getUsersArray()[j]);
+              } 
+            }
+          }
+          
+      }
+
+
       System.out.println("The first user in the file, " + users.getOGuser() + ", has a grand number of " + String.format("%s", twoDegrees) + " users at 2 degrees of separation");
-    }
+        
+      }    
+      
+
 
     //This function will complete task 5 by returning the median number of followers in the network
     static int medianFollowers(FollowerData followerInfo){
