@@ -15,14 +15,7 @@ class FollowerData{
 }
 
 public class Analysis {
-    
-    /** 
-     * @param mostPopular  - this array contains all of those with the most followers
-     * @param mostFollowers - this is the largest number of followers on the network
-     * @param allUsers - this list will store all of the unique users of Doppler
-     * @param names Splits each line iY﻿our Text Here!n the .txt file into respective users 
-     */
-
+  
     public static void main(String[] args) {
         GraphCreator network = new GraphCreator();
         GraphData users = network.collateAllUsers(args[0], false);
