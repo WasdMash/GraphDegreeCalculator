@@ -44,6 +44,7 @@ public class BreadthFirst {
         }
 
         return visited;
+        //Could also use this for visualisation for that cheeky A*
 
     }
     

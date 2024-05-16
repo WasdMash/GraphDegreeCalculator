@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 class FollowerData{
@@ -160,6 +159,7 @@ public class Analysis {
       }
     }
 
+    //Perfect - now can also return an array of how many followers each user can reach for graphic purposes
     static String bestPropagator(int[][] network, GraphData users){
       //Set to this so that we don't have an issue when comparing any reasonable name alphabetically with
         //bestAdvertiser as opposed to comparing a name with an empty string
